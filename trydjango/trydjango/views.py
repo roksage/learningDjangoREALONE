@@ -14,7 +14,17 @@ def home_view(request):
 
     article_obj = Article.objects.get(id = random.randint(0,20))
 
+    list_to_display = [123123,15215,15125,152512,123123,15215,15125,15251,2123123,15215,15125,152512]
+    list_to_display_str = ''
+    
+    for number in list_to_display:
+        list_to_display_str += f'<li> this is number {str(number)}</li>'
+
+    article_queryset = Article.objects.all()
+
     context = {
+        'object_list': article_queryset,
+        'list_to_display_str' : list_to_display_str,
         'title' : article_obj.title,
         'id' : article_obj.id,
         'content' : article_obj.content 
