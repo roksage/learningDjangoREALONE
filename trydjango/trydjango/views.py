@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 
 
 
-def home_view(request):
+def home_view(request,*args,**kwargs):
     
     random_number = random.randint(10, 100000)
 
@@ -16,7 +16,7 @@ def home_view(request):
 
     list_to_display = [123123,15215,15125,152512,123123,15215,15125,15251,2123123,15215,15125,152512]
     list_to_display_str = ''
-    
+
     for number in list_to_display:
         list_to_display_str += f'<li> this is number {str(number)}</li>'
 

@@ -12,7 +12,7 @@
 
 <ul> {% for item in object_list %}
     {% if item.title %}
-    <li><a href="/articles{{ item.id }}/"> This is TITLE: {{ item.title }}  This is CONTENT: {{ item.content }}</a></li>
+    <li><a href="/articles/{{ item.id }}/"> This is TITLE: {{ item.title }}  This is CONTENT: {{ item.content }}</a></li>
     {% endif %}
     {% endfor %}
 </ul>

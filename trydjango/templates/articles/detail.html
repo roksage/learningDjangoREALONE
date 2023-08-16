@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+
+
+
+{% block content %}
+
+<h1>Hello WORLD</h1>
+
+{% if object%}
+<h4>This is title:     {{ object.title }}     and this is content:  {{ object.content }}  and this is id: {{ object.id }} and this is object {{ object }}</h4>
+{% endif%}
+<button><a href="http://127.0.0.1:8000/">HEEELLO</a></button>
+{% endblock content %}
