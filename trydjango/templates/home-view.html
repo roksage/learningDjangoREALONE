@@ -6,9 +6,11 @@
 
 {% block content %}
 
-<h1>Hello WORLD</h1>
+<h5>Hello WORLD</h5>
 
-<h4>This is title:     {{ title }}     and this is content:  {{ content }}  and this is id: {{ id }} </h4>
+
+
+<h1>THIS IS MAIN PAGE</h1>
 
 <ul> {% for item in object_list %}
     {% if item.title %}
@@ -16,5 +18,4 @@
     {% endif %}
     {% endfor %}
 </ul>
-
 {% endblock content %}

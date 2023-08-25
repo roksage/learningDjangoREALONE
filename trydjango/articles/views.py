@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Article
-# Create your views here.
+from django.contrib.auth.decorators import login_required
+from .forms import ArticleForm
+from django.contrib.auth import authenticate, login, logout
+
 
 
 def article_detail_view(request, id = None):
@@ -14,7 +17,35 @@ def article_detail_view(request, id = None):
     }
 
 
-    return render(request, "articles/detail.html", context=context) 
+    return render(request, "articles/search.html", context=context) 
+
+
+
+@login_required
+def article_create_view(request):
+
+    form = ArticleForm()
+
+    context = {
+        'form': form
+    }
+
+
+    if request.method == "POST":
+
+        form = ArticleForm(request.POST)
+        context['form'] = form
+        
+        if form.is_valid():
+            title_of_post = form.cleaned_data.get('title')
+            content_of_post = form.cleaned_data.get('content')
+            article_object = Article.objects.create(title = title_of_post, content = content_of_post)
+
+            context['object'] = article_object
+            context['created'] = True
+
+    return render(request, "articles/create.html", context=context) 
+
 
 
 def article_search_view(request):
@@ -33,6 +64,7 @@ def article_search_view(request):
         query = None
 
 
+
     if query is not None:
         article_obj = Article.objects.get(id = query)
 
@@ -42,3 +74,6 @@ def article_search_view(request):
     }
 
     return render(request, 'articles/search.html', context=context)
+
+
+
