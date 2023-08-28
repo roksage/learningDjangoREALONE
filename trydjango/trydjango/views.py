@@ -1,13 +1,13 @@
 
 from django.http import HttpResponse
 from articles.models import Article
-
+from django.contrib.auth.decorators import login_required
 import random
 
 from django.template.loader import render_to_string
 
 
-
+@login_required
 def home_view(request,*args,**kwargs):
     
 
@@ -18,6 +18,7 @@ def home_view(request,*args,**kwargs):
 
     }
 
+   
 
     HTML_STRING = render_to_string('home-view.html', context = context)
 

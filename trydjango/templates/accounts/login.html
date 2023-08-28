@@ -9,9 +9,9 @@
 
 <form method="POST">{% csrf_token%}
 
-    <div style="margin-top:200px;"> <input type="text" name="username" placeholder="username"> </div>
-    <div style="margin-top:20px;"> <input type="password" name="password" placeholder="password"> </div>
+    {{form.as_p}}
     <button type="submit" > login</button> </div>
+    
 </form>
 
 </div>
