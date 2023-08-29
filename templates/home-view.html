@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+
+
+
+{% block content %}
+
+<h5>Hello WORLD</h5>
+
+
+
+<h1>THIS IS MAIN PAGE</h1>
+
+<ul> {% for item in object_list %}
+    {% if item.title %}
+    <li><a href="/articles/{{ item.id }}/"> This is TITLE: {{ item.title }}  This is CONTENT: {{ item.content }}</a></li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endblock content %}

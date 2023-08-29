@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+
+
+
+{% block content %}
+
+
+{% if not created %}
+
+<form action="/articles/create" method="POST"> 
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" > Create article</button> </div>
+
+</form>
+
+
+
+
+{% else %}
+
+<div style="margin-top:120px;"> <h1> New title was created {{object.title}} with content: {{object.content}}</h1> </div>
+<button><a href="http://127.0.0.1:8000/articles/{{object.id}}">You can check that article by clicking this button</a></button>
+
+{% endif %}
+
+
+{% endblock content %}
+
