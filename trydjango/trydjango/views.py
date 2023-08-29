@@ -22,11 +22,6 @@ def home_view(request,*args,**kwargs):
 
     HTML_STRING = render_to_string('home-view.html', context = context)
 
-    # HTML_STRING = """
-    # <h1>Hello WORLD</h1>
-    # <h4>This is title:     {title}     and this is content:  {content}  and this is id: {id} </h4>
-
-    # """.format(**context)
 
 
     return HttpResponse(HTML_STRING)
