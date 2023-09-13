@@ -3,98 +3,66 @@ from .models import Article
 from django.contrib.auth.decorators import login_required
 from .forms import ArticleForm
 from django.contrib.auth import authenticate, login, logout
+from django.http import Http404
 
 
 @login_required
-def article_detail_view(request, id = None):
+def article_detail_view(request, slug = None):
     article_obj = None
 
-    if id is not None:
-        article_obj = Article.objects.get(id = id)
-
+    if slug is not None:
+        try:
+            article_obj = Article.objects.get(slug = slug)
+        except Article.DoesNotExist:
+            raise Http404
+        except Article.MultipleObjectsReturned:
+            article_obj = Article.objects.filter(slug=slug).first()
+        except:
+            raise Http404
+        
     context = {
         'object' : article_obj,
     }
-
-
-    return render(request, "articles/search.html", context=context) 
+    print(context)
+    return render(request, "articles/detail.html", context=context) 
 
 
 @login_required
 def article_create_view(request):
 
     form = ArticleForm(request.POST or None)
-
+    
     context = {
         'form': form
     }
-
+    print(context)
     if form.is_valid():
         article_object = form.save()
-        context['form'] = ArticleForm()
-        
-        context['created'] = True
 
+        article_id = Article.objects.get(id = article_object.id)
+
+        context['form'] = ArticleForm(instance=article_object)
+
+        context['created'] = True
+        context['slug'] = article_id.slug
+        print(context['slug'])
     return render(request, "articles/create.html", context=context) 
 
 
 
 
-# @login_required
-# def article_create_view(request):
-
-#     form = ArticleForm()
-
-#     context = {
-#         'form': form
-#     }
-
-
-#     if request.method == "POST":
-
-#         form = ArticleForm(request.POST)
-#         context['form'] = form
-#         print(context)
-#         if form.is_valid():
-#             title_of_post = form.cleaned_data.get('title')
-#             content_of_post = form.cleaned_data.get('content')
-#             article_object = Article.objects.create(title = title_of_post, content = content_of_post)
-
-#             context['object'] = article_object
-#             context['created'] = True
-#             print(context)
-#     return render(request, "articles/create.html", context=context) 
-
-
 @login_required
 def article_search_view(request):
 
-    article_obj = None
-
-
-
-    query_dict = request.GET
-
-
-
-    try:
-        query = int(query_dict.get('query'))
-    except:
-        query = None
+    query = request.GET.get('query')
+    qs = Article.objects.search(query=query)
+    context = {
+        "object_list": qs
+    }
+    print(context['object_list'])
 
     
-
-    if query is not None:
-        article_obj = Article.objects.get(id = query)
-
-
-    context = {
-        'object' : article_obj,
-    }
-
-    print(context)
-
-    return render(request, 'articles/search.html', context=context)
+    return render(request, "articles/search.html", context=context)
 
 
 

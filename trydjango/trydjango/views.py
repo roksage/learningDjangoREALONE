@@ -18,7 +18,6 @@ def home_view(request,*args,**kwargs):
 
     }
 
-   
 
     HTML_STRING = render_to_string('home-view.html', context = context)
 

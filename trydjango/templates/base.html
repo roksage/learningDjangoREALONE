@@ -3,13 +3,17 @@
     <head>
         <body>
             THIS WILL BE IN EVERY FILE HAHAHA
-            <button><a href="/articles/create">Create new Article</a></button>
-            <form>
+            <form action="{% url 'article-search' %}" method="GET">
                 <input type="text" name="query"/>
                 <input type="submit" />
             </form>
             <button><a href="/">GO HOME</a></button>
-
+            <ul>
+            <li><button><a href="{% url 'article-create' %}">Create</a></button></li>
+            <li><button><a href="{% url 'register' %}">Register</a></button></li>
+            <li><button><a href="{% url 'login' %}">Login</a></button></li>
+            <li><button><a href="{% url 'logout' %}">Logout</a></button></li>
+            </ul>
             {% block content %}
             {% endblock content %}
         </body>

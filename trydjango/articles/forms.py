@@ -10,7 +10,7 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:
         model = Article
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'slug']
 
     def clean(self):
         data = self.cleaned_data
@@ -21,7 +21,7 @@ class ArticleForm(forms.ModelForm):
         return data
 
 
-
+    
 
  
 class ArticleFormOLD(forms.Form):
