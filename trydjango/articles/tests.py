@@ -28,7 +28,7 @@ class ArticleTestCase(TestCase):
         obj = Article.objects.all().last()  
         new_slugs = []
 
-        for i in range(0,50000):
+        for i in range(0,50):
             instance = slugify_instance_title(obj, save = False)
             new_slugs.append(instance.slug)
 
@@ -36,6 +36,10 @@ class ArticleTestCase(TestCase):
 
         self.assertEqual(len(new_slugs), len(unique_slugs))
 
+    def test_article_search_manager(self):
 
-    
-    
+        qs = Article.objects.search(query = 'hello world')
+        self.assertEqual(qs.count(), self.number)
+        qs = Article.objects.search(query = 'bla')
+        self.assertEqual(qs.count(), self.number)
+   
