@@ -11,7 +11,7 @@
 
 
 <h1>THIS IS MAIN PAGE</h1>
-<button><a href="{% url 'article-create' %}">Create new Article</a></button>
+<button><a href="{% url 'articles:create' %}">Create new Article</a></button>
 <ul> {% for item in object_list %}
     {% if item.title %}
     <li><a href="{{ item.get_absolute_url }} "> This is TITLE: {{ item.title }}  This is CONTENT: {{ item.content }} {{item.slug}}</a></li>

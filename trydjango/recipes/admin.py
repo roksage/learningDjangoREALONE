@@ -2,16 +2,17 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 # Register your models here.
 
-from .models import Recipe, RecipieIngredient
+from .models import Recipe, RecipeIngredient
 
 
 
 
 
 class RecipeIngredientInLine(admin.StackedInline):
-    model = RecipieIngredient
+    model = RecipeIngredient
     # fields = ['name', 'quantity', 'directions', 'unit']
     extra = 1
+    readonly_fields = ['quantity_as_float', 'as_mks', 'as_imperial']
 
 class RecipeAdmin(admin.ModelAdmin):
     inlines = [RecipeIngredientInLine]

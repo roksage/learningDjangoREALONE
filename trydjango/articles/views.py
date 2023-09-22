@@ -45,6 +45,7 @@ def article_create_view(request):
 
         context['created'] = True
         context['slug'] = article_id.slug
+        # return redirect(article_object.get_absolute_url())
         print(context['slug'])
     return render(request, "articles/create.html", context=context) 
 
