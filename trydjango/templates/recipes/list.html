@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block content %}
+
+<h1>My recipes</h1>
+<button><a href="{% url 'recipes:create' %}">Create new Recipe</a></button>
+<ul> {% for item in object_list %}
+    {% if item.name %}
+    <li><a href="{{ item.get_absolute_url }} "> {{ item.name }}</a></li>
+    {% endif %}
+    {% endfor %}
+</ul>
+{% endblock content %}

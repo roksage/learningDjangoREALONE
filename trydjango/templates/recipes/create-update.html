@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+
+
+{% block content %}
+
+<style>
+    .ingredient-form {
+        border-bottom: 1px solid black;
+        border-: 1px solid red;
+    }
+    .hidden{
+        display: none
+    }
+</style>
+
+{% if message %}
+
+<p>{{message}}</p>
+
+{% endif %}
+
+<form action="" method="POST"> 
+    {% csrf_token %}
+    {% for field in form %}
+
+    <div class="{% if field.field.required %} {{form.required_css_class }}{%endif%}">
+
+        {{ field.errors }}
+        {{field.label}}: {{field}}
+    {% if field.help_text %}
+        <p class="help">{{  field.help_text }}</p>
+    {% endif %}
+    </div>
+    {% endfor %}
+
+
+    {% if formset %}
+    <h3> Ingredients</h3>
+
+    {{ formset.managment_form }}
+        {% for form in formset %}
+            <div class="ingredient-form">
+                {{form.as_p }}
+            </div>
+        {% endfor %}
+        <div id="empty_form", class = 'hidden'>{{formset.empty_form}}</div>
+        <button id="add-more", type='button'>Add more</button>
+    {% endif %}
+
+
+
+
+    <button type="submit" >Save info</button> 
+
+</form>
+
+
+<script>
+    
+    const addMoreBtn = document.getElementById(id="add-more")
+
+    addMoreBtn.addEventListener('click', add_new_form)
+
+    function add_new_form(event) {
+        if (event) {
+            event.preventDefault()
+        }
+
+    }
+
+</script>
+
+{% endblock content %}
+
