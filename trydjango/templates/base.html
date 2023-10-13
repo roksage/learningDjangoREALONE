@@ -1,12 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://unpkg.com/htmx.org@1.5.0"></script>
+        <style>
+            .htmx-indicator{
+                display: none;
+            }
+            .htmx-request .htmx-indicator{
+                display: inline;
+            }
+
+            .htmx-inverter-indicator{
+                display: inline;
+            }
+            .htmx-request .htmx-inverter-indicator{
+                display: none;
+            }
+            .htmx-massage-inline{
+                display: inline;
+            }
+        </style>
+    </head>
         <body>
             THIS WILL BE IN EVERY FILE HAHAHA
-            <form action="{% url 'articles:search' %}" method="GET">
-                <input type="text" name="query"/>
-                <input type="submit" />
-            </form>
+            {% include "search/search-form.html" %}
             <button><a href="/">GO HOME</a></button>
             <ul>
             <li><button><a href="{% url 'articles:create' %}">Create</a></button></li>
@@ -17,7 +34,6 @@
             {% block content %}
             {% endblock content %}
         </body>
-    </head>
 </html>
 
 

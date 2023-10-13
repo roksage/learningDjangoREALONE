@@ -6,6 +6,27 @@ from .validators import validate_unit_of_measure
 from .utils import number_str_to_float
 import pint
 
+from django.db.models import Q
+
+
+class RecipeQuerySet(models.QuerySet):
+
+    def search(self, query=None):
+        if query is None or query == '':
+            return self.none()
+        lookups = Q(name__icontains=query) | Q(name__icontains=query)
+        return self.filter(lookups)
+
+
+class RecipeManager(models.Manager):
+
+    def get_queryset(self):
+        print(f'this is db: {self.model}')
+        return RecipeQuerySet(self.model, using=self.db)
+
+    def search(self, query= None):
+        return self.get_queryset().search(query=query)
+
 class Recipe(models.Model):
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -16,9 +37,13 @@ class Recipe(models.Model):
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
+    objects = RecipeManager()
 
     def get_absolute_url(self):
         return reverse('recipes:detail', kwargs={'id':self.id})
+    
+    def get_hx_url(self):
+        return reverse('recipes:hx-detail', kwargs={'id':self.id})
     
     def get_edit_url(self):
         return reverse('recipes:edit', kwargs={'id':self.id})
@@ -42,7 +67,13 @@ class RecipeIngredient(models.Model):
 
     def get_absolute_url(self):
         return self.recipe.get_absolute_url()
- 
+
+    def get_hx_edit_url(self):
+        kwargs = {
+            'parent_id': self.recipe.id,
+            'id': self.id
+        }
+        return reverse('recipes:hx-ingredient-detail', kwargs=kwargs)
 
 
     def convert_to_system(self, system = 'mks'):
@@ -68,7 +99,10 @@ class RecipeIngredient(models.Model):
         qty = self.quantity
         qty_as_float, qty_as_float_success = number_str_to_float(qty)
         
-        if qty_as_float_success:
+        print(f'cia - {self.quantity_as_float}')
+        if self.quantity_as_float is not None:
+            print('[ass]')
+        elif qty_as_float_success:
             self.quantity_as_float = qty_as_float
         else:
             self.quantity_as_float = None

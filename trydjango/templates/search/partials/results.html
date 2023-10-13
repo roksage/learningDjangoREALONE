@@ -1,0 +1,24 @@
+
+
+
+
+
+
+<h3> You have searched for {{request.GET.query}} in {{request.GET.type}} </h3>
+{% for object in queryset %}
+{% if object.name %}
+<li><a href="{{ object.get_absolute_url }}"> {{object.name}} </a></li>
+{% else %}
+<li><a href="{{ object.get_absolute_url }}"> {{object.title}} </a></li>
+{% endif %}
+{% empty %}
+<li> NO RESULT FOUND</li>
+{% endfor %}
+
+{% if request.htmx %}
+
+<a href= '/search/?query={{request.GET.query}}&type={{request.GET.type}}'>View all</a>
+
+{% endif %}
+
+

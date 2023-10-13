@@ -6,26 +6,8 @@
 
 {% block content %}
 
-<h1>This is the recipe {{ object.description }}<small><a href={{ object.get_edit_url }}>Edit</a></small></h1>
+<div hx-get="{{ hx_url }}" hx-trigger="revealed">
+        <div class="htmx-indicator">Loading...</div>
+</div>
 
-
-{% if object %}
-<h4> this is description:  {{ object.description }};      and this is direction: {{ object.direction }}      and you should: {{ object.directions }}</h4>
-
-{% endif %}
-
-
-{% for ingredient in object.get_ingredients_children%}
-
-<li><ul><h1>{{ingredient.name}}</h1> {{ingredient.unit}}
-        {{ingredient.as_imperial}}
-        {{ingredient.as_mks}}
-</ul></li>
-
-{% endfor %}
-
-{% if request.user == object.user %}
-<h2> This is you {{ object.user }}</h2>
-{% endif %}
-<button><a href="http://127.0.0.1:8000/">  HEEELLO</a></button>
 {% endblock content %}
