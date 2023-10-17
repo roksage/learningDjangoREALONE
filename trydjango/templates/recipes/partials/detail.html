@@ -1,4 +1,12 @@
-<h1>This is the recipe {{ object.name }}<small><a href={{ object.get_edit_url }}>Edit</a></small></h1>
+<h1>This is the recipe {{ object.name }}</h1>
+
+{% if object.get_edit_url%}
+<h1>
+        <small><a href={{ object.get_edit_url }}>Edit</a></small>
+        <small><a href={{ object.get_delete_url }}>Delete</a></small>
+
+</h1>
+{% endif %}
 
 
 {% if object %}

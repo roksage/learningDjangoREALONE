@@ -25,7 +25,6 @@ def search_view(request):
 
     qs = Klass.objects.search(query=query)
 
-    print(qs)
 
     context = {
         "queryset": qs
