@@ -1,0 +1,22 @@
+
+body {
+    color: red !important;
+}
+
+
+.htmx-indicator{
+    display: none;
+}
+.htmx-request .htmx-indicator{
+    display: inline;
+}
+
+.htmx-inverter-indicator{
+    display: inline;
+}
+.htmx-request .htmx-inverter-indicator{
+    display: none;
+}
+.htmx-massage-inline{
+    display: inline;
+}

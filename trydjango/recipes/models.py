@@ -2,12 +2,12 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse 
 # Create your models here.
-from .validators import validate_unit_of_measure
+from .validators import validate_unit_of_measure, validate_zip_extension
 from .utils import number_str_to_float
 import pint
-
+import pathlib
 from django.db.models import Q
-
+import uuid
 
 class RecipeQuerySet(models.QuerySet):
 
@@ -56,8 +56,22 @@ class Recipe(models.Model):
     def get_ingredients_children(self):
         return self.recipeingredient_set.all()
 
-class RecipeIngredient(models.Model):
 
+def recipe_ingredient_image_upload_handler(instance, filename):
+
+    fpath = pathlib.Path(filename)
+    new_fname = str(uuid.uuid1())
+    return f'photos_base/{new_fname}{fpath.suffix}'
+
+
+class RecipeIngredientImage(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=recipe_ingredient_image_upload_handler)
+
+    
+
+
+class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     name = models.CharField(max_length=220)
     quantity = models.CharField(max_length=50)

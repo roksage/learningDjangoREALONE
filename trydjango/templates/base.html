@@ -1,27 +1,12 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html>
     <head>
         <script src="https://unpkg.com/htmx.org@1.5.0"></script>
-        <style>
-            .htmx-indicator{
-                display: none;
-            }
-            .htmx-request .htmx-indicator{
-                display: inline;
-            }
-
-            .htmx-inverter-indicator{
-                display: inline;
-            }
-            .htmx-request .htmx-inverter-indicator{
-                display: none;
-            }
-            .htmx-massage-inline{
-                display: inline;
-            }
-        </style>
+        <link rel="stylesheet" href="{% static 'recipes/recipes-htmx.css'%} " />
     </head>
-        <body>
+        <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
             THIS WILL BE IN EVERY FILE HAHAHA
             {% include "search/search-form.html" %}
             <button><a href="/">GO HOME</a></button>

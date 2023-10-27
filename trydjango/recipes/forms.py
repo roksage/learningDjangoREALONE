@@ -5,7 +5,7 @@ from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms.utils import ErrorList
 
-from .models import Recipe, RecipeIngredient
+from .models import Recipe, RecipeIngredient, RecipeIngredientImage
 
 class RecipeForm(forms.ModelForm):
     required_css_class = 'required-field'
@@ -43,3 +43,9 @@ class RecipeIngredientForm(forms.ModelForm):
         model = RecipeIngredient
         fields = ['name', 'quantity', 'unit']
         #fields = '__all__'
+
+
+class RecipeIngredientImageForm(forms.ModelForm):
+    class Meta:
+        model = RecipeIngredientImage
+        fields = ['image']

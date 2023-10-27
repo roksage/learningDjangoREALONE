@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Recipe
-from .forms import RecipeForm, RecipeIngredientForm
+from .forms import RecipeForm, RecipeIngredientForm, RecipeIngredientImageForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 # Create your views here.
 from django.forms.models import modelformset_factory
 from .models import RecipeIngredient
 from django.urls import reverse
-
+from .services import extract_text_via_ocr_service
 
 @login_required
 def recipe_list_view(request, id=None):
@@ -23,12 +23,23 @@ def recipe_list_view(request, id=None):
 
 @login_required
 def recipe_delete_view(request, id=None):
-
-    obj = get_object_or_404(Recipe, id=id, user=request.user)
-
+    try:
+        obj = get_object_or_404(Recipe, id=id, user=request.user)
+    except:
+        obj = None
+    if obj is None:
+        if request.htmx:
+            return HttpResponse('No page')
+        raise Http404
+    
     if request.method == "POST":
         obj.delete()
         success_url = reverse('recipes:list')
+        if request.htmx:
+            headers = {
+                'HX-Redirect': success_url
+            }
+            return HttpResponse('Success', headers = headers)
         return redirect(success_url)
 
     context = {
@@ -41,13 +52,21 @@ def recipe_delete_view(request, id=None):
 # @login_required
 def recipe_ingredient_delete_view(request, id=None, parent_id=None):
 
-    print(id, parent_id, request.user)
-
-    obj = get_object_or_404(RecipeIngredient, recipe__id = parent_id, id=id, recipe__user=request.user)
+    try:
+        obj = get_object_or_404(RecipeIngredient, recipe__id = parent_id, id=id, recipe__user=request.user)
+    except:
+        obj = None
+    if obj is None:
+        if request.htmx:
+            return HttpResponse('No page')
+        raise Http404
 
     if request.method == "POST":
+        name = obj.name
         obj.delete()
-        success_url = reverse('recipes:detail', kwargs={'id':parent_id})
+        success_url = reverse('recipes:edit', kwargs={'id':parent_id})
+        if request.htmx:
+            return render(request, 'recipes/partials/ingredient-inline-delete-response.html', {'name':name})
         return redirect(success_url)
 
     context = {
@@ -55,6 +74,9 @@ def recipe_ingredient_delete_view(request, id=None, parent_id=None):
     }
 
     return render(request, 'recipes/delete.html', context)
+
+
+    
 
 
 @login_required
@@ -176,3 +198,30 @@ def recipe_ingredient_update_hx_view(request, parent_id = None, id=None):
         return render(request, 'recipes/partials/ingredient-inline.html', context)
 
     return render(request, 'recipes/partials/ingredient-form.html', context)
+
+
+
+
+
+def recipe_ingredient_image_upload_view(request, parent_id):
+    form = RecipeIngredientImageForm(request.POST or None, request.FILES or None)
+    template_name = 'recipes/partials/upload-image.html'
+    if request.htmx:
+        template_name = 'recipes/partials/image-upload-form.html'
+    try:
+        parent_obj = Recipe.objects.get(id=parent_id, user = request.user)
+    except:
+        parent_obj = None
+    if parent_obj is None:
+        raise Http404
+
+    context = {"form" : form}
+
+
+    if form.is_valid():
+        obj = form.save(commit = False)
+        obj.recipe = parent_obj
+        obj.save()
+        result = extract_text_via_ocr_service(obj.image)
+        print(result)
+    return render(request, template_name, context) 

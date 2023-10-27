@@ -3,7 +3,9 @@
 {% if object.get_edit_url%}
 <h1>
         <small><a href={{ object.get_edit_url }}>Edit</a></small>
-        <small><a href={{ object.get_delete_url }}>Delete</a></small>
+        
+    <a href="{{object.get_delete_url}}" hx-post = "{{object.get_delete_url}}" hx-confirm = 'are you sure you want to delete - {{object.name}}' 
+    hx-trigger='click'>Remove</a>
 
 </h1>
 {% endif %}
